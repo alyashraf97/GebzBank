@@ -267,6 +267,7 @@
             buttonDeposit.TabIndex = 5;
             buttonDeposit.Text = "Deposit";
             buttonDeposit.UseVisualStyleBackColor = true;
+            buttonDeposit.Click += buttonDeposit_Click;
             // 
             // label6
             // 

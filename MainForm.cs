@@ -3,6 +3,7 @@ using static System.ComponentModel.Design.ObjectSelectorEditor;
 using System.Data;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Microsoft.VisualBasic.Logging;
 
 namespace GebzBank
 {
@@ -69,6 +70,28 @@ namespace GebzBank
         {
             RegistrationForm registrationForm = new RegistrationForm();
             registrationForm.Show();
+        }
+
+        private void buttonDeposit_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int _accountNumber = Convert.ToInt32(textAccountNumber.Text);
+
+                if (_accountNumber != 0)
+                {
+                    DepositForm depositForm = new DepositForm(_accountNumber);
+                    depositForm.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Invalid account number, contact Administrator!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show("Must Login First.." + Ex.Message , "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -295,8 +295,8 @@ public class DatabaseHelper
         }
 
     }
-
-    public (bool depositStatus, string depositStatusMessage, int accountNumber, string transactionUuid, DateTime depositDate, decimal oldBalance, decimal newBalance, decimal depositAmount) DepositIntoAccount(int accountNumber, decimal amount, DateTime date)
+    
+    public static (bool depositStatus, string depositStatusMessage, int accountNumber, string transactionUuid, DateTime depositDate, decimal oldBalance, decimal newBalance, decimal depositAmount) DepositIntoAccount(int accountNumber, decimal amount, DateTime date)
     {
         // Create a tuple to store the return values
         var result = (depositStatus: false, depositStatusMessage: "", accountNumber: accountNumber, transactionUuid: "", depositDate: date, oldBalance: 0m, newBalance: 0m, depositAmount: amount);
@@ -402,7 +402,7 @@ public class DatabaseHelper
 
     }
 
-    public (bool withdrawStatus, string withdrawStatusMessage, int accountNumber, string transactionUuid, DateTime withdrawDate, decimal oldBalance, decimal newBalance, decimal withdrawAmount) WithdrawFromAccount(int accountNumber, decimal amount, DateTime date)
+    public static (bool withdrawStatus, string withdrawStatusMessage, int accountNumber, string transactionUuid, DateTime withdrawDate, decimal oldBalance, decimal newBalance, decimal withdrawAmount) WithdrawFromAccount(int accountNumber, decimal amount, DateTime date)
     {
 
         // Create a SQL command to check if the account exists and get its balance and guid

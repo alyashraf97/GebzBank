@@ -1,44 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Npgsql;
 
-namespace GebzBank
+// A class that represents a deposit transaction
+public class Deposit
 {
-    internal class Deposit
+    // Properties of the deposit
+    public int AccountNumber { get; private set; } // The account number of the beneficiary
+    public decimal Amount { get; private set; } // The amount of money deposited
+    public DateTime Date { get; private set; } // The date of the deposit
+    public string Uuid { get; private set; } // The unique identifier of the deposit
+    public bool DepositStatus { get; private set; } // The status of the deposit
+    public string DepositStatusMessage { get; private set; } // The message of the deposit
+    public decimal OldBalance { get; private set; } // The old balance of the account
+    public decimal NewBalance { get; private set; } // The new balance of the account
+
+    // Constructor that initializes the properties with parameters, generates a new uuid and executes the deposit
+    public Deposit(int accountNumber, decimal amount, DateTime date)
     {
-        public Guid DepositID { get; private set; }
-        public DateTime TransactionDate { get; private set; }
-        public decimal TransactionAmount { get; private set; }
-        public int AccountNumber { get; private set; }
-        public decimal InitialBalance { get; set; }
-        public decimal FinalBalance { get; set; }
-        public bool DepositStatus { get; private set; }
+        AccountNumber = accountNumber;
+        Amount = amount;
+        Date = date;
+        Uuid = Guid.NewGuid().ToString();
+        DepositIntoAccount();
+    }
 
-        private Deposit(Guid id, DateTime date, decimal amount, int accountNumber, decimal initBalance, decimal finalBalance, bool status)
-        {
-            DepositID = id;
-            TransactionDate = date;
-            TransactionAmount = amount;
-            AccountNumber = accountNumber;
-            InitialBalance = initBalance;
-            FinalBalance = finalBalance;
-            DepositStatus = status;
-        }
-
-        public static (bool status, string message, Deposit deposit) NewDeposit(string accountUuid, DateTime date, decimal amount)
-        {
-
-            string sql = "INSERT INTO deposits (id, date, amount, account_uuid) VALUES (@id, @date, @amount, @account_uuid)";
-            var db = DatabaseHelper.GetInstance();
-            using var cmd = new NpgsqlCommand(sql, db);
-            cmd.Parameters.AddWithValue("id", Guid.NewGuid().ToString());
-            cmd.Parameters.AddWithValue("date", date);
-            cmd.Parameters.AddWithValue("amount", amount);
-            cmd.Parameters.AddWithValue("account_uuid", accountUuid);
-
-        }
+    // A method that deposits money into the account and sets the properties with the transaction details
+    private void DepositIntoAccount()
+    {
+        // Call the function with the properties of this deposit object as arguments and get the result tuple
+        var result = DatabaseHelper.DepositIntoAccount(AccountNumber, Amount, Date);
+        // Set the properties with the values from the result tuple
+        DepositStatus = result.depositStatus;
+        DepositStatusMessage = result.depositStatusMessage;
+        OldBalance = result.oldBalance;
+        NewBalance = result.newBalance;
     }
 }
